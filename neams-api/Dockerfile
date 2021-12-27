@@ -1,35 +1,42 @@
-FROM ruby:3.0
-# aptを使う理由はたしかDockerの書籍に書いてあったはず
-RUN apt-get update -qq && apt-get install -y curl
+FROM ruby:2.7.1-alpine
+# ARG Dockerfile内で使用する変数名。docker-compose.yml内で指定する
+ARG WORKDIR
+# Dockerイメージで使用する環境変数を指定します。
+# ENVを使って設定した環境変数は、イメージからコンテナへ渡されます。
+# コンテナへ渡されると、コンテナ内で起動したアプリケーションで参照することができます。
+ENV RUNTIME_PACKAGES="linux-headers libxml2-dev make gcc libc-dev nodejs tzdata postgresql-dev postgresql git" \
+    DEV_PACKAGES="build-base curl-dev" \
+    HOME=/${WORKDIR} \
+    LANG=C.UTF-8 \
+    TZ=Asia/Tokyo
+# ここで指定したディレクトリパスの中にRailsアプリが作成されます。
+WORKDIR ${HOME}
 
-RUN mkdir -p /app
-WORKDIR /app
+COPY Gemfile* ./
+#
+RUN apk update && \
+    apk upgrade && \
+    apk add --no-cache ${RUNTIME_PACKAGES} && \
+    apk add --virtual build-dependencies --no-cache ${DEV_PACKAGES} && \
+    bundle install -j4 && \
+    apk del build-dependencies
+# ローカルにある全てのファイルをイメージにコピーしています。
+COPY . .
+# 生成されたコンテナ内で実行したいコマンドを指定します
 
-# install nodejs(LTS)
-RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && apt-get install -y nodejs
-
-# install yarn
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
-    && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
-    && apt update && apt install -y yarn
-
-COPY Gemfile* /myapp/
-RUN bundle install
-
-COPY entrypoint.sh /usr/bin/
-RUN chmod +x /usr/bin/entrypoint.sh
-
-# 公開ポートの指定
-EXPOSE 3000
-
-# Configure the main process to run when running the image
-# イメージ内部に実行するメインプロセスの設定
 CMD ["rails", "server", "-b", "0.0.0.0"]
-
 ##############################################
 #################  MEMO  #####################
 ##############################################
 # @see https://qiita.com/daichi41/items/dfea6195cbb7b24f3419
+# Dockerfile @see https://blog.cloud-acct.com/posts/u-rails-dockerfile
 # [RUN] コマンドの実行。
 # [ENTRYPOINT] 一番最初に実行するコマンド
 # [CMD] イメージ内部のソフトウェア実行（つまりRailsのことですね）
+# --virtualオプション <名前>
+# addコマンドのオプションです。
+# このオプションを付けてインストールしたパッケージは、一まとめにされ、新たなパッケージとして扱うことができます。
+# パッケージのパッケージ化、ヘルプでは「仮想パッケージ」と呼んでいます。
+# この仮想パッケージを呼び出すには、指定した<名前>で呼び出します。
+# ここではbuild-dependenciesと言う名前を付けています。
+# 実行した後に削除する、いわゆる「使い捨てパッケージ」をインストールする場合に良く使われます。
