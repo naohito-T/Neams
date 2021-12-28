@@ -1,0 +1,4 @@
+# env
+env/decrypt/api/local.env
+env/decrypt/common/local.env
+env/decrypt/front/local.env

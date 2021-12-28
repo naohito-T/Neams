@@ -1,28 +1,67 @@
-version: '3'
-services:
-  napi:
+version: '3.8'
 
-  nginx:
-    image: nginx:1.15.8
-    ports:
-      - 8443:80
+services:
+  # Railsに必要なDBコンテナを立ち上げています。
+  # このコンテナは開発環境でしか利用しません。
+  # 本番環境ではHerokuのアドオンのPostgreSQLを使用します。
+  db:
+    env_file:
+      - ./env/decrypt/common/local.env
+    image: postgres:12.3-alpine
+    environment:
+      TZ: UTC
+      PGTZ: UTC
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+    # volumes: <ローカルのパス : コンテナのパス>
     volumes:
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-      - public-data:/neams-api/public
-      - tmp-data:/neams-api/tmp
-    # 別のサービスに依存することを示す。upやdownするときに指定したサービスが先に起動するようになる。
+      - ./api/tmp/db:/var/lib/postgresql/data
+
+  api:
+    # サービスのベースイメージにDockerfileを指定する場合には、このbuildを使用する。
+    # ここには参照するDockerfileのパスを指定します。
+    # 本来build: ./apiという形で構いませんが、下で記述するargsオプションを使用するのでcontextでファイルパスを指定しています。
+    env_file:
+      - ./env/decrypt/common/local.env
+    build:
+      context: ./neams-api
+      # ここにはDockerfileに渡す値を指定します。（正確にはDockerイメージをビルドする際に渡す引数）
+      args:
+        WORKDIR: $WORKDIR
+    environment:
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+    volumes:
+      - ./neams-api/:/$WORKDIR
+    depends_on:
+      - db
+    ports:
+      - "$API_PORT:$CONTAINER_PORT"
+
+  front:
+    env_file:
+      - ./env/decrypt/common/local.env
+    build:
+      context: ./neams-ui
+      args:
+        WORKDIR: $WORKDIR
+        CONTAINER_PORT: $CONTAINER_PORT
+    # コンテナに対して実行したいコマンドを記述します。DockerfileのCMD命令と同じ扱いです。
+    command: yarn run dev
+    volumes:
+      - ./front:/$WORKDIR
+    ports:
+      - "$FRONT_PORT:$CONTAINER_PORT"
     depends_on:
       - api
-    networks:
-      - neamsnw
-# networkを指定しないといけない
-networks:
-  neamsnw:
-# volumeを指定しないといけない
-volumes:
-  public-data:
-  tmp-data:
-  log-data:
-  db-data:
 
+# # networkを指定しないといけない
+# networks:
+#   neamsnw:
+# # volumeを指定しないといけない
+# volumes:
+#   public-data:
+#   tmp-data:
+#   log-data:
+#   db-data:
+# YAMLファイルはaa:bbを時刻として解釈するので、必ずダブルクォーテーションで囲むようにしてください。
+# と本にありましたが、実際囲まなくても正常に動きました。ただ囲んでおく方が間違い無いでしょう
 
