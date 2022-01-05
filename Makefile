@@ -13,3 +13,6 @@ restert:
 # build configとか設定し直した時のみOK
 build:
 		docker-compose --env-file ./env/decrypt/common/local.env build
+
+dev:
+
