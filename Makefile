@@ -1,3 +1,8 @@
+# ログの色
+R := \e[31m
+G := \e[32m
+B := \e[34m
+
 # project start
 docker-compose down && docker-compose up -d
 
