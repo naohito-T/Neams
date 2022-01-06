@@ -5,10 +5,10 @@ services:
   # このコンテナは開発環境でしか利用しません。
   # 本番環境ではHerokuのアドオンのPostgreSQLを使用します。
   db:
-    env_file:
-      - ./env/decrypt/common/local.env
     image: postgres:12.3-alpine
+    # 環境変数をキー: 値で指定。ここで指定した値はコンテナ内に直接渡すことができる。
     environment:
+      # OSのタイムゾーンを指定している。PostgreSQLはタイムゾーンがコマンド
       TZ: UTC
       PGTZ: UTC
       POSTGRES_PASSWORD: $POSTGRES_PASSWORD
@@ -20,34 +20,33 @@ services:
     # サービスのベースイメージにDockerfileを指定する場合には、このbuildを使用する。
     # ここには参照するDockerfileのパスを指定します。
     # 本来build: ./apiという形で構いませんが、下で記述するargsオプションを使用するのでcontextでファイルパスを指定しています。
-    env_file:
-      - ./env/decrypt/common/local.env
+    # サービスのベースイメージにDockerfileを使用する場合はこのbuildを使用する。
     build:
       context: ./neams-api
       # ここにはDockerfileに渡す値を指定します。（正確にはDockerイメージをビルドする際に渡す引数）
       args:
-        WORKDIR: $WORKDIR
+        WORKDIR: $API_WORK_DIR
+    # ここで指定した環境変数はコンテナ内に直接渡すことができます。
     environment:
+      # DB内に接続するために必要なpass
       POSTGRES_PASSWORD: $POSTGRES_PASSWORD
     volumes:
-      - ./neams-api/:/$WORKDIR
+      - ./neams-api/:/$API_WORK_DIR
     depends_on:
       - db
     ports:
       - "$API_PORT:$CONTAINER_PORT"
 
   front:
-    env_file:
-      - ./env/decrypt/common/local.env
     build:
       context: ./neams-ui
       args:
-        WORKDIR: $WORKDIR
+        WORKDIR: $API_WORK_DIR
         CONTAINER_PORT: $CONTAINER_PORT
     # コンテナに対して実行したいコマンドを記述します。DockerfileのCMD命令と同じ扱いです。
-    command: yarn run dev
+    command: yarn dev
     volumes:
-      - ./front:/$WORKDIR
+      - ./front:/$API_WORK_DIR
     ports:
       - "$FRONT_PORT:$CONTAINER_PORT"
     depends_on:
