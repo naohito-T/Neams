@@ -25,3 +25,7 @@ makefileで.envrcを上書きする。
 .envrcは読み込み先を変更する(プロダクトごと)
 最終的にはdocker-composeを起動しておきたい。
 lefthookでmerge後、envが自動設定されるようにする。
+
+## 作業途中
+これの途中
+https://blog.cloud-acct.com/posts/u-docker-compose-rails6new/
