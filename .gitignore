@@ -2,3 +2,6 @@
 env/decrypt/api/.env.local
 env/decrypt/common/.env.local
 env/decrypt/front/.env.local
+
+# DB
+api/

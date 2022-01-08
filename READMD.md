@@ -7,11 +7,22 @@
 direnv
 lefthook
 
-## memo
+開発に必要なもの
 
-片方dockerで片方dockerじゃない場合はどうなる？？
-これを調査する目的も兼ねて、nuxtはコンテナ化せずに対応する。
-これはnuxtもコンテナ化する方法で記載する。
+1. 暗号化のファイルを復号する(鍵は担当者からもらってください)
+
+`(make env.encrypt KEY=*********** FILE_PATH="********")`
+
+2. 環境の.envrcを作成する
+
+`(make envrc.make ENVIRONMENT=*****)`
+
+ここでdirenvが勝手に読みこまれれば完了
+
+3. docker 起動
+
+
+## memo
 
 docker環境変数
 [docker](https://blog.cloud-acct.com/posts/u-env-docker-compose/)
@@ -21,11 +32,8 @@ docker環境変数
 
 ## 環境変数運用方法
 
-makefileで.envrcを上書きする。
-.envrcは読み込み先を変更する(プロダクトごと)
-最終的にはdocker-composeを起動しておきたい。
 lefthookでmerge後、envが自動設定されるようにする。
 
 ## 作業途中
-これの途中
+
 https://blog.cloud-acct.com/posts/u-docker-compose-rails6new/

@@ -7,14 +7,24 @@ services:
   db:
     image: postgres:12.3-alpine
     # 環境変数をキー: 値で指定。ここで指定した値はコンテナ内に直接渡すことができる。
+    # docker-compose.yml => コンテナへ環境変数を渡す
     environment:
       # OSのタイムゾーンを指定している。PostgreSQLはタイムゾーンがコマンド
-      TZ: UTC
-      PGTZ: UTC
+      TZ: $TIME_ZONE
+      PGTZ: $TIME_ZONE
+      POSTGRES_USER: $POSTGRES_USER
       POSTGRES_PASSWORD: $POSTGRES_PASSWORD
     # volumes: <ローカルのパス : コンテナのパス>
+    # ボリューム
+    #  - /var/lib/mysql # パス指定のみ。Engine にボリュームを生成させます。
+    #  - datavolume:/var/lib/mysql # 名前つきボリューム。
+
+    # バインドマウント
+    #  - /opt/data:/var/lib/mysql # 絶対パスのマッピングを指定。
+    #  - ./cache:/tmp/cache # ホストからのパス指定。Compose ファイルからの相対パス。
+    #  - ~/configs:/etc/configs/:ro # ユーザーディレクトリからの相対パス
     volumes:
-      - ./api/tmp/db:/var/lib/postgresql/data
+      - "./api/tmp/db:/var/lib/postgresql/data"
 
   api:
     # サービスのベースイメージにDockerfileを指定する場合には、このbuildを使用する。
@@ -29,9 +39,10 @@ services:
     # ここで指定した環境変数はコンテナ内に直接渡すことができます。
     environment:
       # DB内に接続するために必要なpass
+      POSTGRES_USER: $POSTGRES_USER
       POSTGRES_PASSWORD: $POSTGRES_PASSWORD
     volumes:
-      - ./neams-api/:/$API_WORK_DIR
+      - "./neams-api/:/$API_WORK_DIR"
     depends_on:
       - db
     ports:
@@ -46,7 +57,7 @@ services:
     # コンテナに対して実行したいコマンドを記述します。DockerfileのCMD命令と同じ扱いです。
     command: yarn dev
     volumes:
-      - ./front:/$API_WORK_DIR
+      - "./front:/$API_WORK_DIR"
     ports:
       - "$FRONT_PORT:$CONTAINER_PORT"
     depends_on:
