@@ -4,4 +4,4 @@ env/decrypt/common/.env.local
 env/decrypt/front/.env.local
 
 # DB
-api/
+api/tmp/db
