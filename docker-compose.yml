@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  # Railsに必要なDBコンテナを立ち上げています。
+  # このコンテナは開発環境でしか利用しません。
+  # 本番環境ではHerokuのアドオンのPostgreSQLを使用します。
+  db:
+    image: postgres:12.3-alpine
+    # 環境変数をキー: 値で指定。ここで指定した値はコンテナ内に直接渡すことができる。
+    # docker-compose.yml => コンテナへ環境変数を渡す
+    environment:
+      # OSのタイムゾーンを指定している。PostgreSQLはタイムゾーンがコマンド
+      TZ: $TIME_ZONE
+      PGTZ: $TIME_ZONE
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+    # volumes: <ローカルのパス : コンテナのパス>
+    # ボリューム
+    #  - /var/lib/mysql # パス指定のみ。Engine にボリュームを生成させます。
+    #  - datavolume:/var/lib/mysql # 名前つきボリューム。
+
+    # バインドマウント
+    #  - /opt/data:/var/lib/mysql # 絶対パスのマッピングを指定。
+    #  - ./cache:/tmp/cache # ホストからのパス指定。Compose ファイルからの相対パス。
+    #  - ~/configs:/etc/configs/:ro # ユーザーディレクトリからの相対パス
+    volumes:
+      - "./api/tmp/db:/var/lib/postgresql/data"
+
+  api:
+    # サービスのベースイメージにDockerfileを指定する場合には、このbuildを使用する。
+    # ここには参照するDockerfileのパスを指定します。
+    # 本来build: ./apiという形で構いませんが、下で記述するargsオプションを使用するのでcontextでファイルパスを指定しています。
+    # サービスのベースイメージにDockerfileを使用する場合はこのbuildを使用する。
+    build:
+      context: ./neams-api
+      # ここにはDockerfileに渡す値を指定します。（正確にはDockerイメージをビルドする際に渡す引数）
+      args:
+        WORKDIR: $API_WORK_DIR
+    # ここで指定した環境変数はコンテナ内に直接渡すことができます。
+    environment:
+      # DB内に接続するために必要なpass
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+    volumes:
+      - "./neams-api/:/$API_WORK_DIR"
+    depends_on:
+      - db
+    ports:
+      - "$API_PORT:$CONTAINER_PORT"
+
+  front:
+    build:
+      context: ./neams-ui
+      args:
+        WORKDIR: $API_WORK_DIR
+        CONTAINER_PORT: $CONTAINER_PORT
+    # コンテナに対して実行したいコマンドを記述します。DockerfileのCMD命令と同じ扱いです。
+    command: yarn dev
+    volumes:
+      - "./front:/$API_WORK_DIR"
+    ports:
+      - "$FRONT_PORT:$CONTAINER_PORT"
+    depends_on:
+      - api
+
+# # networkを指定しないといけない
+# networks:
+#   neamsnw:
+# # volumeを指定しないといけない
+# volumes:
+#   public-data:
+#   tmp-data:
+#   log-data:
+#   db-data:
+# YAMLファイルはaa:bbを時刻として解釈するので、必ずダブルクォーテーションで囲むようにしてください。
+# と本にありましたが、実際囲まなくても正常に動きました。ただ囲んでおく方が間違い無いでしょう
+
