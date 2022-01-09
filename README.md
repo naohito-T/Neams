@@ -21,6 +21,9 @@ lefthook
 
 3. docker 起動
 
+## envを修正したら
+
+再度暗号化するmakeを実行してください。
 
 ## memo
 
