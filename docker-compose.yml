@@ -23,6 +23,8 @@ services:
     #  - /opt/data:/var/lib/mysql # 絶対パスのマッピングを指定。
     #  - ./cache:/tmp/cache # ホストからのパス指定。Compose ファイルからの相対パス。
     #  - ~/configs:/etc/configs/:ro # ユーザーディレクトリからの相対パス
+    # メリット
+    # 作業ディレクトリの変更を即座にDockerコンテナから参照したいとき。
     volumes:
       - "./api/tmp/db:/var/lib/postgresql/data"
 
@@ -35,31 +37,31 @@ services:
       context: ./neams-api
       # ここにはDockerfileに渡す値を指定します。（正確にはDockerイメージをビルドする際に渡す引数）
       args:
-        WORKDIR: $API_WORK_DIR
+        WORKDIR: $WORKDIR
     # ここで指定した環境変数はコンテナ内に直接渡すことができます。
     environment:
       # DB内に接続するために必要なpass
       POSTGRES_USER: $POSTGRES_USER
       POSTGRES_PASSWORD: $POSTGRES_PASSWORD
     volumes:
-      - "./neams-api/:/$API_WORK_DIR"
+      - "./neams-api/:/$WORKDIR"
     depends_on:
       - db
     ports:
-      - "$API_PORT:$CONTAINER_PORT"
+      - "$API_PORT:$CONTAINER_PORT" # 3000:3000
 
   front:
     build:
       context: ./neams-ui
       args:
-        WORKDIR: $API_WORK_DIR
+        WORKDIR: $WORKDIR
         CONTAINER_PORT: $CONTAINER_PORT
     # コンテナに対して実行したいコマンドを記述します。DockerfileのCMD命令と同じ扱いです。
     command: yarn dev
     volumes:
-      - "./front:/$API_WORK_DIR"
+      - "./neams-ui:/$WORKDIR"
     ports:
-      - "$FRONT_PORT:$CONTAINER_PORT"
+      - "$FRONT_PORT:$CONTAINER_PORT" # localhost:8080:3000
     depends_on:
       - api
 

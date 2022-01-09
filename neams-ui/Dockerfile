@@ -13,6 +13,7 @@ ENV HOME=/${WORKDIR} \
     TZ=Asia/Tokyo \
     HOST=0.0.0.0
 
+# Dockerfileで定義した命令を実行するコンテナ内の作業ディレクトリパス
 WORKDIR ${HOME}
 
 EXPOSE ${CONTAINER_PORT}
