@@ -37,3 +37,17 @@ lefthookでmerge後、envが自動設定されるようにする。
 ## 作業途中
 
 https://blog.cloud-acct.com/posts/u-docker-compose-rails6new/
+
+## Git How to
+
+サブモジュールで運用しているため編集した際には以下運用をする。
+**Railsアプリを編集する場合**
+
+1. apiディレクトリでコミットする。
+2. rootディレクトリに戻る
+3. rootリポジトリもコミットする
+
+## docker buildのタイミング
+
+Dockrfile変更時
+モジュール管理ファイルを変更した時(Gem, package.json)など。なにかそれをインストールする際に見るもの。

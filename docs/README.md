@@ -85,11 +85,11 @@ for VS Code if you're not using typescript)
 
 ## サブモジュール化
 
-rootディレクトリは`git init`を初期に行っている状態。
+rootディレクトリは`git init`を初期に行っている状態。サブディレクトリは作成されている状態。
 
+git initされている状態であれば
 apiディレクトリ(もともとはmasterとなっていた)
 `$ git br -m develop`
-
 
 「api」リポジトリがコミットされると、当然コミットIDも変化します。
 
@@ -101,9 +101,30 @@ apiディレクトリに移動してコミットする
 rootディレクトリに戻る
 rootリポジトリもコミットする
 
-tanakanaohitoshi@naohitotanaka: ~/work/product/github.com/github.com/naohito-T/Neams/neams-ui (develop +%=)
 `$ git init`
-Initialized empty Git repository in /Users/tanakanaohitoshi/work/product/github.com/github.com/naohito-T/Neams/neams-ui/.git/
 `$ git br -m develop`
 `$ git add .`
 `$ gc`
+
+ここからgithub上でサブモジュール用のプロジェクトのリポジトリを作成する。
+
+`$ git remote -vv` 設定されていない
+`$ git remote add origin [new repository ssh url]`
+`$ git push -u `
+
+ルートディレクトリに戻りサブモジュール追加をする
+`$ git submodule add git@github.com:naohito-T/Neams-ui.git neams-ui`
+
+.gitmodulesファイルが作成されている
+[submodule "neams-ui"]
+	path = neams-ui
+	url = git@github.com:naohito-T/Neams-ui.git
+
+
+サブモジュールに追加されているか確認する(ディレクトリ名のみの情報であればOK)
+`$ git ls-files`
+
+エラー時
+.gitmodules
+.git/config内と
+.git/modules/内のディレクトリ名を変更すればいける
