@@ -1,7 +1,26 @@
 # makefile注意
 # makeは一列のコマンドごとにsh(シェル)を起動する。
 # これを避けるためコマンドの終了後とに ; でつなげること
+# コンテナ内で任意のコマンドを実行する
+# $ docker-compose run <サービス名> <任意のコマンド>
 
+# Dockerイメージを作成する
+# $ docker-compose build
+
+# 複数のコンテナの生成し起動する
+# $ docker-compose up
+
+# コンテナを停止する
+# $ docker-compose stop
+
+# 停止中のコンテナを削除する
+# $ docker-compose rm -f
+
+# コンテナの停止・削除を一度に行う
+# $ docker-compose down
+
+# コンテナの一覧を表示する
+# $ docker-compose ps -a
 
 # ログの色
 R := \e[31m

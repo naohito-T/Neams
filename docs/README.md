@@ -51,3 +51,35 @@ rails new <ディレクトリ名> <-オプション> <--モードオプション
 パスワードを変えるには、イメージを作り直すか、コンテナ内で直接変更を行う必要があります。
 
 [参考URL](https://blog.cloud-acct.com/posts/u-docker-compose-rails6new)
+
+## nuxt生成
+
+`$ docker-compose run --rm front yarn create nuxt-app`
+
+※neams-uiにDockrfileがあるとerrorになる
+
+以下で対応
+`$ docker-compose run --rm front yarn create nuxt-app app`
+create-nuxt-app v4.0.0
+✨  Generating Nuxt.js project in app
+? Project name: app
+? Programming language: TypeScript
+? Package manager: Yarn
+? UI framework: None
+? Nuxt.js modules: Axios - Promise based HTTP cl
+ient
+? Linting tools: ESLint, Prettier
+? Testing framework: Jest
+? Rendering mode: Universal (SSR / SSG)
+? Deployment target: Server (Node.js hosting)
+? Development tools: jsconfig.json (Recommended
+for VS Code if you're not using typescript)
+? Continuous integration: GitHub Actions (GitHub
+ only)
+? What is your GitHub username? naohito-t
+? Version control system: Git
+
+
+`$ mv front/app/{*,.*} neams-ui`
+
+
