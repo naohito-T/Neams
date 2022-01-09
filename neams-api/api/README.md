@@ -1,3 +1,0 @@
-# Introduction
-
-OpenAPIなどのJSONを配置。

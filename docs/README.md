@@ -83,3 +83,27 @@ for VS Code if you're not using typescript)
 `$ mv front/app/{*,.*} neams-ui`
 
 
+## サブモジュール化
+
+rootディレクトリは`git init`を初期に行っている状態。
+
+apiディレクトリ(もともとはmasterとなっていた)
+`$ git br -m develop`
+
+
+「api」リポジトリがコミットされると、当然コミットIDも変化します。
+
+その場合、「root」リポジトリもコミットする必要があります。
+
+今後のコミット手順
+Railsアプリを編集した
+apiディレクトリに移動してコミットする
+rootディレクトリに戻る
+rootリポジトリもコミットする
+
+tanakanaohitoshi@naohitotanaka: ~/work/product/github.com/github.com/naohito-T/Neams/neams-ui (develop +%=)
+`$ git init`
+Initialized empty Git repository in /Users/tanakanaohitoshi/work/product/github.com/github.com/naohito-T/Neams/neams-ui/.git/
+`$ git br -m develop`
+`$ git add .`
+`$ gc`

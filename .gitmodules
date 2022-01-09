@@ -1,0 +1,6 @@
+[submodule "neams-api"]
+	path = neams-api
+	url = git@github.com:naohito-T/Neams-api.git
+[submodule "neams-ui"]
+	path = neams-ui
+	url = git@github.com:naohito-T/Neams-ui.git
