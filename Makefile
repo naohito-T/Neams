@@ -86,7 +86,7 @@ _env.decrypt:
 	fi
 
 # .envrc 作成method
-# 最初の > で必ず上書きします。
+# 最初の > で.envrcを必ず上書きします。
 _env.makerc:
 	@if [ -n "$(ENVIRONMENT)" ]; then\
 		printf '${B}%s\n' "# envを.envrcに記載";\
@@ -97,4 +97,3 @@ _env.makerc:
 	else\
 		printf '${R}%s\n' "# you need define ENVIRONMENT.\nyou need read README.md.";\
 	fi
-
