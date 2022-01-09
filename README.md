@@ -47,7 +47,10 @@ https://blog.cloud-acct.com/posts/u-docker-compose-rails6new/
 2. rootディレクトリに戻る
 3. rootリポジトリもコミットする
 
+これはサブモジュールがdevelopにmergeされた時にやるかなと、main
+
 ## docker buildのタイミング
 
 Dockrfile変更時
 モジュール管理ファイルを変更した時(Gem, package.json)など。なにかそれをインストールする際に見るもの。
+
