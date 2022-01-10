@@ -21,6 +21,9 @@ lefthook
 
 3. docker 起動
 
+## envを修正したら
+
+再度暗号化するmakeを実行してください。
 
 ## memo
 
@@ -33,11 +36,6 @@ docker環境変数
 ## 環境変数運用方法
 
 lefthookでmerge後、envが自動設定されるようにする。
-
-## 作業途中
-
-https://blog.cloud-acct.com/posts/u-docker-compose-rails6new/
-
 ## Git How to
 
 サブモジュールで運用しているため編集した際には以下運用をする。

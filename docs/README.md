@@ -44,6 +44,11 @@ rails new <ディレクトリ名> <-オプション> <--モードオプション
 
 --apiオプション ... API専用のRailsアプリケーションを作成する場合に指定するオプションです。
 
+## Rails Controller生成コマンド
+
+末尾はディレクトリ構造となる。
+`$ docker-compose run --rm api rails g controller home::api::v1::hello`
+
 ## Postgresのパスワードを変更したい時
 
 この値はデータベースが初期化されるタイミングで設定されるため、以後この環境変数を変えてもコンテナ内のPostgreSQLのパスワードを変更することができません。

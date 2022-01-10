@@ -40,6 +40,7 @@ services:
         WORKDIR: $WORKDIR
     # ここで指定した環境変数はコンテナ内に直接渡すことができます。
     environment:
+      API_DOMAIN: ${HOST}:${FRONT_PORT} # localhost:8080
       # DB内に接続するために必要なpass
       POSTGRES_USER: $POSTGRES_USER
       POSTGRES_PASSWORD: $POSTGRES_PASSWORD
@@ -55,7 +56,8 @@ services:
       context: ./neams-ui
       args:
         WORKDIR: $WORKDIR
-        CONTAINER_PORT: $CONTAINER_PORT
+        CONTAINER_PORT: $CONTAINER_PORT # 3000
+        API_URL: "${SCHEME}${HOST}:${API_PORT}" # http://localhost:3000
     # コンテナに対して実行したいコマンドを記述します。DockerfileのCMD命令と同じ扱いです。
     command: yarn dev
     volumes:

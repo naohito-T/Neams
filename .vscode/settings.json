@@ -18,5 +18,10 @@
     "titleBar.inactiveBackground": "#83256199",
     "titleBar.inactiveForeground": "#e7e7e799"
   },
+  // @see https://zukucode.com/2020/10/eslint-vscode-subdirectory.html
+  // サブディレクトリのeslintが読み込まれない場合があるため
+  "eslint.workingDirectories": [
+    "./neams-ui"
+],
   "peacock.color": "#832561"
 }
