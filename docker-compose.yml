@@ -57,7 +57,7 @@ services:
       args:
         WORKDIR: $WORKDIR
         CONTAINER_PORT: $CONTAINER_PORT # 3000
-        API_URL: ${SCHEME}${HOST}:${API_PORT} # http://localhost:3000
+        API_URL: "${SCHEME}${HOST}:${API_PORT}" # http://localhost:3000
     # コンテナに対して実行したいコマンドを記述します。DockerfileのCMD命令と同じ扱いです。
     command: yarn dev
     volumes:
