@@ -58,3 +58,6 @@ docker環境変数
 Dockrfile変更時
 モジュール管理ファイルを変更した時(Gem, package.json)など。なにかそれをインストールする際に見るもの。
 
+## やること
+
+[アスキーアート(AA)](https://qiita.com/kenzooooo/items/9bc3520215a7d9823608)
