@@ -3,29 +3,33 @@
 ## Project Start
 
 ```sh
-# サブモジュールごとcloneする。
+# プロジェクト初期時: サブモジュールごとcloneする。
 $ git clone --recursive []
+
+# サブモジュールをcloneし忘れたら
+$ git submodule update --init --recursive
+
+# 暗号化のファイルを復号する(鍵は担当者からもらってください)
+# zshでの環境変数渡し、bashは適宜参照してください。
+$ (make env.decrypt KEY=*********** FILE_PATH="********")
+
+# local環境の.envrcを作成する
+$ (make envrc.make ENVIRONMENT=local)
+# ここでdirenvが勝手に読みこまれれば完了
+
+# docker 起動(Makefile run targetが実行されます。)
+$ make
 
 ```
 
-## Project Startに関して必要なもの
+## What you need to know about project start
 
-direnv
-lefthook
+```sh
 
-開発に必要なもの
+$ brew install direnv
+$ brew install lefthook
 
-1. 暗号化のファイルを復号する(鍵は担当者からもらってください)
-
-`(make env.encrypt KEY=*********** FILE_PATH="********")`
-
-2. 環境の.envrcを作成する
-
-`(make envrc.make ENVIRONMENT=*****)`
-
-ここでdirenvが勝手に読みこまれれば完了
-
-3. docker 起動
+```
 
 ## envを修正したら
 
@@ -39,19 +43,15 @@ docker環境変数
 環境作成
 [dockdr](https://blog.cloud-acct.com/posts/u-rails-dockerfile)
 
-## 環境変数運用方法
-
-lefthookでmerge後、envが自動設定されるようにする。
 ## Git How to
 
-サブモジュールで運用しているため編集した際には以下運用をする。
-**Railsアプリを編集する場合**
+サブモジュール運用をしております。
 
-1. apiディレクトリでコミットする。
+1. サブモジュールで作業をしコミットする。
 2. rootディレクトリに戻る
 3. rootリポジトリもコミットする
 
-これはサブモジュールがdevelopにmergeされた時にやるかなと、main
+上記の制約があるためサブモジュールでプルリクを作成しdevelopにmergeをしたらlefthookが作動するようになっております。
 
 ## docker buildのタイミング
 
