@@ -1,6 +1,12 @@
 # Introduction
 
-## How To ?
+## Project Start
+
+```sh
+# サブモジュールごとcloneする。
+$ git clone --recursive []
+
+```
 
 ## Project Startに関して必要なもの
 
