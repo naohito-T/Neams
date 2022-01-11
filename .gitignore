@@ -1,7 +1,7 @@
 # env
-env/decrypt/api/.env.local
-env/decrypt/common/.env.local
-env/decrypt/front/.env.local
+env/decrypt/api/.env.*
+env/decrypt/common/.env.*
+env/decrypt/front/.env.*
 
 # DB
 api/tmp/db

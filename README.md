@@ -61,3 +61,10 @@ Dockrfile変更時
 ## やること
 
 [アスキーアート(AA)](https://qiita.com/kenzooooo/items/9bc3520215a7d9823608)
+
+## Heroku How To
+
+マニフェストの確認
+setupに記述した設定がうまくいっているかHeroku管理画面から確認してみる。
+
+[Heroku Dashbord](https://dashboard.heroku.com/apps)
