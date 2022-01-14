@@ -38,6 +38,8 @@ services:
       # ここにはDockerfileに渡す値を指定します。（正確にはDockerイメージをビルドする際に渡す引数）
       args:
         WORKDIR: $WORKDIR
+        LANG: $LANG
+        TZ: $TZ
     # ここで指定した環境変数はコンテナ内に直接渡すことができます。
     environment:
       API_DOMAIN: ${HOST}:${FRONT_PORT} # localhost:8080
@@ -58,6 +60,9 @@ services:
         WORKDIR: $WORKDIR
         CONTAINER_PORT: $CONTAINER_PORT # 3000
         API_URL: "${SCHEME}${HOST}:${API_PORT}" # http://localhost:3000
+        LANG: $LANG
+        TZ: $TZ
+        FRONT_HOST: $FRONT_HOST
     # コンテナに対して実行したいコマンドを記述します。DockerfileのCMD命令と同じ扱いです。
     command: yarn dev
     volumes:
@@ -67,10 +72,10 @@ services:
     depends_on:
       - api
 
-# # networkを指定しないといけない
+# networkを指定しないといけない
 # networks:
 #   neamsnw:
-# # volumeを指定しないといけない
+# volumeを指定しないといけない
 # volumes:
 #   public-data:
 #   tmp-data:
@@ -78,4 +83,3 @@ services:
 #   db-data:
 # YAMLファイルはaa:bbを時刻として解釈するので、必ずダブルクォーテーションで囲むようにしてください。
 # と本にありましたが、実際囲まなくても正常に動きました。ただ囲んでおく方が間違い無いでしょう
-

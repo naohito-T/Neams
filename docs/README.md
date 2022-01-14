@@ -133,3 +133,42 @@ rootリポジトリもコミットする
 .gitmodules
 .git/config内と
 .git/modules/内のディレクトリ名を変更すればいける
+
+## docker build時
+
+- フロント
+
+```sh
+$ docker-compose build [service name]
+
+# フロントはinstallする。
+$ docker-compose run --rm front yarn install
+```
+
+- api
+
+```sh
+# イメージを再ビルドする
+$ docker-compose build api
+
+# 起動し確認
+$ docker-compose up api
+
+# gemがインストールされているか確認
+$ docker-compose run --rm api bundle info hirb
+
+```
+
+## env確認
+
+```sh
+# ENV確認
+# RUN echo ${HOME}
+# RUN echo ${LANG}
+# RUN echo ${TZ}
+# RUN echo ${RACK_ENV}
+# RUN echo ${RAILS_ENV}
+# RUN echo ${RAILS_LOG_TO_STDOUT}
+# RUN echo ${RAILS_SERVE_STATIC_FILES}
+# RUN echo ${RAILS_MASTER_KEY}
+```

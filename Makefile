@@ -28,15 +28,27 @@ G := \e[32m
 B := \e[34m
 N := \e[0m
 
-# .envrc書き込み内容
+# .envrc書き込みパス
 DECODING_COMMON_PATH := dotenv ./env/decrypt/common/.env.
 DECODING_API_PATH := dotenv ./env/decrypt/api/.env.
 DECODING_FRONT_PATH := dotenv ./env/decrypt/front/.env.
 
 
 # project start makeコマンドのみで実行する
-run:
+.PHONY: start
+start:
 	docker-compose down && docker-compose up -d
+
+# コンテナの停止・削除を同時に行う
+.PHONY: down
+down:
+	docker-compose down
+
+# プロジェクト内でなにか実行したい時
+# $ docker-compose run --rm api bundle info puma インストール確認
+.PHONY: run
+run:
+	docker-compose run --rm $(SERVICE) $(ARG)
 
 # ホスト側のマウントディレクトリorファイルを更新したい場合の再起動
 restert:
@@ -44,12 +56,7 @@ restert:
 
 # build configとか設定し直した時のみOK
 build:
-	docker-compose build;\
-
-
-# コンテナの停止・削除を同時に行う
-down:
-	docker-compose down;
+	docker-compose build $(SERVICE)
 
 # @をつけると実行コマンドを標準出力に出力しない。
 # 暗号化

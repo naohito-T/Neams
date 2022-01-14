@@ -68,3 +68,38 @@ Dockrfile変更時
 setupに記述した設定がうまくいっているかHeroku管理画面から確認してみる。
 
 [Heroku Dashbord](https://dashboard.heroku.com/apps)
+
+## 必要なenv
+
+```yml
+db
+コンテナに渡す
+TZ: $TIME_ZONE
+PGTZ: $TIME_ZONE
+POSTGRES_USER: $POSTGRES_USER
+POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+
+api
+dockerfileに渡す
+args:
+WORKDIR: $WORKDIR
+
+コンテナに渡す
+API_DOMAIN: ${HOST}:${FRONT_PORT}
+POSTGRES_USER: $POSTGRES_USER
+POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+
+front
+Dockerfileに渡す
+WORKDIR: $WORKDIR
+CONTAINER_PORT: $CONTAINER_PORT # 3000
+API_URL: "${SCHEME}${HOST}:${API_PORT}" # http://localhost:3000
+```
+
+## Docker 掃除
+
+```sh
+$ docker image prune
+$ docker container prune
+$ docker volume prune
+```

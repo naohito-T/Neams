@@ -3,6 +3,9 @@ env/decrypt/api/.env.*
 env/decrypt/common/.env.*
 env/decrypt/front/.env.*
 
+## backfile
+docs/bk
+
 # DB
 api/tmp/db
 neams-ui_hub
