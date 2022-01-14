@@ -100,6 +100,7 @@ _env.makerc:
 		echo ${DECODING_COMMON_PATH}$(ENVIRONMENT) > .envrc;\
 		echo ${DECODING_API_PATH}$(ENVIRONMENT) >> .envrc;\
 		echo ${DECODING_FRONT_PATH}$(ENVIRONMENT) >> .envrc;\
+		direnv allow;\
 		printf '${B}%s\n' "# $(ENVIRONMENT)用の.envrcを作成。\n.envrc done";\
 	else\
 		printf '${R}%s\n' "# you need define ENVIRONMENT.\nyou need read README.md.";\

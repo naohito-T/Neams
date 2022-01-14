@@ -22,6 +22,27 @@ $ make
 
 ```
 
+## deploy
+
+```sh
+# production環境の.envrcを作成し読み込む
+$ (make envrc.make ENVIRONMENT=pro)
+
+Herokuにアプリケーションをデプロイする
+Herokuにアプリケーションが作成できると、gitのリモートリポジトリが1つherokuという名前で登録されます（Gitについてよくわからない場合はGitHubの使い方をご覧ください）。Herokuのgitリポジトリのmasterブランチへpushすることにより、Heroku上で自分が作ったRailsアプリケーションを動かすことができます。
+
+下記のコマンドを実行してHerokuへアプリケーションをデプロイしてください。
+# 現在masterにいる場合
+$ git push heroku master
+現在の作業しているブランチが masterでない場合には、以下のように現在の作業ブランチから Heroku の master ブランチへpushします。
+# masterではい別ブランチの場合
+$ git push heroku 現在のブランチ名:master
+
+# herokuの設定を確認する
+$ heroku config
+
+```
+
 ## What you need to know about project start
 
 ```sh
