@@ -55,7 +55,8 @@ down:
 restert:
 	docker-compose restart
 
-# build configとか設定し直した時のみOK
+# build Gemfile, Package.jsonとか設定し直した時にイメージを再作成してください。
+.PHONY: down
 build:
 	docker-compose build $(SERVICE)
 
@@ -68,6 +69,26 @@ run:
 # ---------------------------------------------------------------#
 #  									  make for API 															 #
 # ---------------------------------------------------------------#
+
+# api console login
+.PHONY: api.console
+api.console:
+	docker-compose run --rm api rails c
+
+# CLI DB login
+.PHONY: login.db
+login.db:
+	docker-compose run --rm api rails dbconsole
+
+# api install confirmation Code : (make api.confirm GEM=xxx)
+.PHONY: api.confirm
+api.confirm:
+	docker-compose run --rm api bundle info $(GEM)
+
+# api test
+.PHONY: api.test
+api.test:
+	docker-compose run --rm api rails t
 
 # Seedデータを追加で投入したい時
 .PHONY: add.seed
@@ -94,17 +115,6 @@ migrate:
 reset.migrate:
 	docker-compose run --rm api rails db:migrate:reset
 
-# CLI DB login
-.PHONY: login.db
-login.db:
-	docker-compose run --rm api rails dbconsole
-
-# api console login
-.PHONY: api.console
-api.console:
-	docker-compose run --rm api rails c
-
-
 # ---------------------------------------------------------------#
 #  												setup make 													 	 #
 # ---------------------------------------------------------------#
@@ -124,6 +134,10 @@ env.decrypt:
 .PHONY: envrc.make
 envrc.make:
 	@make _env.makerc ENVIRONMENT=$(ENVIRONMENT)
+
+# ---------------------------------------------------------------#
+#  												make method 													 #
+# ---------------------------------------------------------------#
 
 # 暗号化 method
 _env.encrypt:

@@ -205,3 +205,29 @@ $ docker-compose run --rm api rails dbconsole
 $ docker-compose run --rm api rails db:reset
 
 ```
+
+## API を Testする
+
+```sh
+$ make api.test
+docker-compose run --rm api rails t
+Creating neams_api_run ... done
+Run options: --seed 45637
+
+# Running:
+
+users seed ...
+users seed ...
+users = 10
+users = 10
+.
+
+Finished in 2.104753s, 0.4751 runs/s, 0.4751 assertions/s.
+1 runs, 1 assertions, 0 failures, 0 errors, 0 skips
+
+1 tests ... 1つのテストブロックの
+1 assertions ... 1つのassertを実行した結果、
+0 failures ... テストの失敗は0
+0 errors ... エラーは0
+0 skips ... 飛ばしたテストは0
+```
