@@ -40,6 +40,8 @@ services:
         WORKDIR: $WORKDIR
         LANG: $LANG
         TZ: $TZ
+    # A server is already running 対策
+    command: /bin/sh -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     # ここで指定した環境変数はコンテナ内に直接渡すことができます。
     environment:
       API_DOMAIN: ${HOST}:${FRONT_PORT} # localhost:8080

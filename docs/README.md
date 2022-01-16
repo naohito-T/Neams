@@ -5,15 +5,30 @@
 
 `direnv edit .`
 するとカレントディレクトリに.envrcが作成され下記のように設定した環境変数が追加/削除される。
+※なんか機能しない場合もある。
 
 .envrc
+
+## env確認コマンド(Dockerfileに記載する)
+
+```sh
+# ENV確認
+# RUN echo ${HOME}
+# RUN echo ${LANG}
+# RUN echo ${TZ}
+# RUN echo ${RACK_ENV}
+# RUN echo ${RAILS_ENV}
+# RUN echo ${RAILS_LOG_TO_STDOUT}
+# RUN echo ${RAILS_SERVE_STATIC_FILES}
+# RUN echo ${RAILS_MASTER_KEY}
+```
 
 
 ## rails作成
 
 `$ docker-compose run --rm api rails new . -f -B -d postgresql --api`
 
-run ... 指定したサービスのコンテナを立ち上げ、任意のコマンドを実行する時に使います。
+run ... 指定したサービスのコンテナを立ち上げ、任意のコマンドを実行する時に使う。
 
 --rmオプション ... 任意のコマンドを実行後、コンテナを自動で削除します。
 
@@ -121,6 +136,8 @@ rootリポジトリもコミットする
 `$ git submodule add git@github.com:naohito-T/Neams-ui.git neams-ui`
 
 .gitmodulesファイルが作成されている
+
+
 [submodule "neams-ui"]
 	path = neams-ui
 	url = git@github.com:naohito-T/Neams-ui.git
@@ -145,11 +162,13 @@ $ docker-compose build [service name]
 $ docker-compose run --rm front yarn install
 ```
 
-- api
+- api(GemfileにGemを追加後)
 
 ```sh
 # イメージを再ビルドする
 $ docker-compose build api
+# 命令を削除しただけの場合は1からイメージが作られない場合もあるため以下を実行
+$ docker-compose build --no-cache api
 
 # 起動し確認
 $ docker-compose up api
@@ -159,16 +178,30 @@ $ docker-compose run --rm api bundle info hirb
 
 ```
 
-## env確認
+## Docker Tips
 
 ```sh
-# ENV確認
-# RUN echo ${HOME}
-# RUN echo ${LANG}
-# RUN echo ${TZ}
-# RUN echo ${RACK_ENV}
-# RUN echo ${RAILS_ENV}
-# RUN echo ${RAILS_LOG_TO_STDOUT}
-# RUN echo ${RAILS_SERVE_STATIC_FILES}
-# RUN echo ${RAILS_MASTER_KEY}
+# イメージを作成した後、前回からの反映を確認する(Docker Desktop)でも確認できるけど..
+$ docker images
+# コンテナiDでイメージ内容確認
+$ docker inspect [container ID]
+
+
+# api modalを作成
+$ docker-compose run --rm api rails g model User --no-fixture
+# --no-fixture ... fixture（フィクスチャ）ファイルを作成しない。
+# 今回のテストデータはseedデータから読み込むのでこのファイルは使用しない。
+
+# テーブル作成コマンド(modalを作成後実施する)
+$ docker-compose run --rm api rails db:migrate
+
+# マイグレーション失敗した場合
+$ docker-compose run --rm api rails db:migrate:reset
+
+# 作成されたDBを確認
+$ docker-compose run --rm api rails dbconsole
+
+# seedデータを全て削除して、新たに投入したい場合
+$ docker-compose run --rm api rails db:reset
+
 ```

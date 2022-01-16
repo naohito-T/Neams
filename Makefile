@@ -44,12 +44,6 @@ start:
 down:
 	docker-compose down
 
-# プロジェクト内でなにか実行したい時
-# $ docker-compose run --rm api bundle info puma インストール確認
-.PHONY: run
-run:
-	docker-compose run --rm $(SERVICE) $(ARG)
-
 # ホスト側のマウントディレクトリorファイルを更新したい場合の再起動
 restert:
 	docker-compose restart
@@ -57,6 +51,42 @@ restert:
 # build configとか設定し直した時のみOK
 build:
 	docker-compose build $(SERVICE)
+
+# プロジェクト内でなにか実行したい時
+# $ docker-compose run --rm api bundle info puma インストール確認
+.PHONY: run
+run:
+	docker-compose run --rm $(SERVICE) $(ARG)
+
+# seedデータを全て削除して、新たに投入したい場合
+.PHONY: initial.seed
+initial.seed:
+	docker-compose run --rm api rails db:reset
+
+# api Model作成
+.PHONY: create.model
+create.model:
+	docker-compose run --rm api rails g model $(NAME) --no-fixture
+
+# Model作成後のマイグレーション テーブル作成(create.model実行後)
+.PHONY: migrate
+migrate:
+	docker-compose run --rm api rails db:migrate
+
+# マイグレーション失敗した場合
+.PHONY: reset.migrate
+reset.migrate:
+	docker-compose run --rm api rails db:migrate:reset
+
+# CLI DB login
+.PHONY: login.db
+login.db:
+	docker-compose run --rm api rails dbconsole
+
+# api console login
+.PHONY: api.console
+api.console:
+	docker-compose run --rm api rails c
 
 # @をつけると実行コマンドを標準出力に出力しない。
 # 暗号化
