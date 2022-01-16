@@ -22,6 +22,10 @@
 # コンテナの一覧を表示する
 # $ docker-compose ps -a
 
+# ---------------------------------------------------------------#
+#  											Variables		 														 #
+# ---------------------------------------------------------------#
+
 # ログの色
 R := \e[31m
 G := \e[32m
@@ -33,6 +37,9 @@ DECODING_COMMON_PATH := dotenv ./env/decrypt/common/.env.
 DECODING_API_PATH := dotenv ./env/decrypt/api/.env.
 DECODING_FRONT_PATH := dotenv ./env/decrypt/front/.env.
 
+# ---------------------------------------------------------------#
+#  											Make for Docker.		 										 #
+# ---------------------------------------------------------------#
 
 # project start makeコマンドのみで実行する
 .PHONY: start
@@ -58,9 +65,18 @@ build:
 run:
 	docker-compose run --rm $(SERVICE) $(ARG)
 
+# ---------------------------------------------------------------#
+#  									  make for API 															 #
+# ---------------------------------------------------------------#
+
+# Seedデータを追加で投入したい時
+.PHONY: add.seed
+add.seed:
+	docker-compose run --rm api rails db:seed
+
 # seedデータを全て削除して、新たに投入したい場合
-.PHONY: initial.seed
-initial.seed:
+.PHONY: reset.seed
+reset.seed:
 	docker-compose run --rm api rails db:reset
 
 # api Model作成
@@ -87,6 +103,11 @@ login.db:
 .PHONY: api.console
 api.console:
 	docker-compose run --rm api rails c
+
+
+# ---------------------------------------------------------------#
+#  												setup make 													 	 #
+# ---------------------------------------------------------------#
 
 # @をつけると実行コマンドを標準出力に出力しない。
 # 暗号化
