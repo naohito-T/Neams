@@ -90,6 +90,16 @@ api.confirm:
 api.test:
 	docker-compose run --rm api rails t
 
+# api controller create (g: generateの簡略)
+.PHONY: create.controller
+create.controller:
+	docker-compose run --rm api rails g controller $(NAMESPACE)
+
+# 作成したapi controllerを削除する(関連するファイルも削除)
+.PHONY: destory.controller
+destory.controller:
+	docker-compose run --rm api rails destroy controller $(NAMESPACE)
+
 # Seedデータを追加で投入したい時
 .PHONY: add.seed
 add.seed:

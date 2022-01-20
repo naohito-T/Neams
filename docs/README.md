@@ -62,7 +62,7 @@ rails new <ディレクトリ名> <-オプション> <--モードオプション
 ## Rails Controller生成コマンド
 
 末尾はディレクトリ構造となる。
-`$ docker-compose run --rm api rails g controller home::api::v1::hello`
+`$ docker-compose run --rm api rails g controller api::v1::home::test::hello`
 
 ## Postgresのパスワードを変更したい時
 
