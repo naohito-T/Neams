@@ -1,5 +1,7 @@
 # Introduction
 
+エンタープライズアプリ
+
 ## Project Start
 
 ```sh
@@ -24,23 +26,49 @@ $ make
 
 ## deploy
 
+本番環境はHerokuを使用。
+Herokuにアプリケーションが作成できると、gitのリモートリポジトリが1つherokuという名前で登録される。
+Herokuのgitリポジトリのmasterブランチへpushすることにより、Heroku上で自分が作ったRailsアプリケーションを動かすことが可能
+
 ```sh
 # production環境の.envrcを作成し読み込む
 $ (make envrc.make ENVIRONMENT=pro)
-
-Herokuにアプリケーションをデプロイする
-Herokuにアプリケーションが作成できると、gitのリモートリポジトリが1つherokuという名前で登録されます（Gitについてよくわからない場合はGitHubの使い方をご覧ください）。Herokuのgitリポジトリのmasterブランチへpushすることにより、Heroku上で自分が作ったRailsアプリケーションを動かすことができます。
+```
 
 下記のコマンドを実行してHerokuへアプリケーションをデプロイしてください。
+```sh
 # 現在masterにいる場合
 $ git push heroku master
-現在の作業しているブランチが masterでない場合には、以下のように現在の作業ブランチから Heroku の master ブランチへpushします。
+
+# 現在の作業しているブランチが masterでない場合には、以下のように現在の作業ブランチから Heroku の master ブランチへpushします。
 # masterではい別ブランチの場合
 $ git push heroku 現在のブランチ名:master
+```
 
+heroku Tips
+
+```sh
 # herokuの設定を確認する
 $ heroku config
 
+# ユーザーテーブルの作成
+api $ heroku run rails db:migrate
+
+# Seedデータの投入
+api $ heroku run rails db:seed
+
+# herokuオープン
+api $ heroku open
+
+```
+
+## deploy check
+
+```sh
+$ curl -v -X POST \
+https://<Herokuアプリ名>.herokuapp.com/api/v1/user_token \
+-H 'Content-Type: application/json' \
+-d '{"auth":{"email":"user0@example.com", "password":"password"}}'
 ```
 
 ## What you need to know about project start

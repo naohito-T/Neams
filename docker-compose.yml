@@ -30,7 +30,7 @@ services:
 
   api:
     # サービスのベースイメージにDockerfileを指定する場合には、このbuildを使用する。
-    # ここには参照するDockerfileのパスを指定します。
+    # ここには参照するDockerfileのパスを指定する。
     # 本来build: ./apiという形で構いませんが、下で記述するargsオプションを使用するのでcontextでファイルパスを指定しています。
     # サービスのベースイメージにDockerfileを使用する場合はこのbuildを使用する。
     build:
@@ -42,8 +42,9 @@ services:
         TZ: $TZ
     # A server is already running 対策
     command: /bin/sh -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
-    # ここで指定した環境変数はコンテナ内に直接渡すことができます。
+    # ここで指定した環境変数はコンテナ内に直接渡すことができる。
     environment:
+      APP_URL: ${APP_URL} # http://localhost:3000
       API_DOMAIN: ${HOST}:${FRONT_PORT} # localhost:8080
       # DB内に接続するために必要なpass
       POSTGRES_USER: $POSTGRES_USER

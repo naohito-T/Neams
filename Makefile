@@ -75,6 +75,11 @@ run:
 api.console:
 	docker-compose run --rm api rails c
 
+# apiが返すrouteを確認できます。
+.PHONY: api.route
+api.route:
+	docker-compose run --rm api rails routes
+
 # CLI DB login
 .PHONY: login.db
 login.db:
@@ -90,7 +95,17 @@ api.confirm:
 api.test:
 	docker-compose run --rm api rails t
 
+# api integration test /app/test/integration
+.PHONY: test.integration
+test.integration:
+	docker-compose run --rm api rails t integration
+
+.PHONY: test.controller
+test.controller:
+	docker-compose run --rm api rails t controllers
+
 # api controller create (g: generateの簡略)
+# Usage : (make create.controller NAMESPACE="Api::V1::Home::UserToken"
 .PHONY: create.controller
 create.controller:
 	docker-compose run --rm api rails g controller $(NAMESPACE)
